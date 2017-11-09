@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MovieQuizModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Registration">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Movies" Relationship="MovieQuizModel.FK_Movies_Registration" FromRole="Registration" ToRole="Movy" />
+  </EntityType>
+  <EntityContainer Name="MovieQuizDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Registrations" EntityType="Self.Registration" />
+    <EntitySet Name="Movies" EntityType="MovieQuizModel.Movy" />
+    <AssociationSet Name="FK_Movies_Registration" Association="MovieQuizModel.FK_Movies_Registration">
+      <End Role="Registration" EntitySet="Registrations" />
+      <End Role="Movy" EntitySet="Movies" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Movy">
+    <Key>
+      <PropertyRef Name="MovieId" />
+    </Key>
+    <Property Name="MovieId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Registration" Relationship="MovieQuizModel.FK_Movies_Registration" FromRole="Movy" ToRole="Registration" />
+  </EntityType>
+  <Association Name="FK_Movies_Registration">
+    <End Type="MovieQuizModel.Registration" Role="Registration" Multiplicity="1" />
+    <End Type="MovieQuizModel.Movy" Role="Movy" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Registration">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Movy">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
